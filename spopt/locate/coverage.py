@@ -9,7 +9,7 @@ from .base import (
     BackupPercentageMixinMixin,
     LocateSolver,
     FacilityModelBuilder,
-    SpecificationError
+    SpecificationError,
 )
 from scipy.spatial.distance import cdist
 

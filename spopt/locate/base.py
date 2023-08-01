@@ -16,8 +16,10 @@ STATUS_CODES = {
     -3: "Undefined",
 }
 
+
 class SpecificationError(pulp.PulpError):
     pass
+
 
 class LocateSolver(BaseSpOptExactSolver):
     """Base class for the ``locate`` package."""
@@ -472,30 +474,31 @@ class FacilityModelBuilder:
 
         """
         if predefined_fac.ndim == 2:
-            n,k = predefined_fac.shape
-            assert k == 1, "predefined facilties array must only be of shape (n_supply, 1) or (n_supply,)"
+            n, k = predefined_fac.shape
+            assert (
+                k == 1
+            ), "predefined facilties array must only be of shape (n_supply, 1) or (n_supply,)"
             predefined_fac = predefined_fac.squeeze()
-        
+
         n_predefined = len(predefined_fac)
 
         if hasattr(obj, "fac_vars"):
             fac_vars = getattr(obj, "fac_vars")
 
             n_facilities = len(fac_vars)
-            
-            if n_facilities < n_predefined: # treat as indices
+
+            if n_facilities < n_predefined:  # treat as indices
                 dummies = numpy.zeros_like(fac_vars)
                 dummies[predefined_fac] = 1
-            elif n_facilities == n_predefined: # treat as dummies
+            elif n_facilities == n_predefined:  # treat as dummies
                 dummies = predefined_fac.copy()
             else:
                 raise ValueError(
-                        "More preselected facilities were provided than supply sites. "
-                        "Expected fewer preselected facilities than supply sites. Check"
-                        " the shape of the predefined faciltiies & supply sites provided."
-                        )
-                
-            
+                    "More preselected facilities were provided than supply sites. "
+                    "Expected fewer preselected facilities than supply sites. Check"
+                    " the shape of the predefined faciltiies & supply sites provided."
+                )
+
             for i, dummy in enumerate(dummies):
                 if dummy:
                     fac_vars[i].setInitialValue(1)

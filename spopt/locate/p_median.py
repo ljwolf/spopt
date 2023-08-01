@@ -8,7 +8,7 @@ from .base import (
     LocateSolver,
     FacilityModelBuilder,
     MeanDistanceMixin,
-    SpecificationError
+    SpecificationError,
 )
 from scipy.spatial.distance import cdist
 
@@ -254,21 +254,22 @@ class PMedian(LocateSolver, BaseOutputMixin, MeanDistanceMixin):
             )
         if facility_capacities is not None:
             sorted_capacities = np.sort(facility_capacities)
-            highest_possible_capacity = sorted_capacities[-p_facilities:].sum() 
-            if highest_possible_capacity < weights.sum(): 
-                raise SpecificationError(f"""
+            highest_possible_capacity = sorted_capacities[-p_facilities:].sum()
+            if highest_possible_capacity < weights.sum():
+                raise SpecificationError(
+                    f"""
                     Problem is infeasible. The highest possible capacity 
                     {highest_possible_capacity}, coming from the {p_facilities}
                     sites with the highest capacity, is smaller than the total demand {weights.sum()}.
                     """
-                    )
+                )
             FacilityModelBuilder.add_facility_capacity_constraint(
                 p_median,
                 weights,
                 facility_capacities,
                 range(len(weights)),
-                range(len(facility_capacities))
-                )
+                range(len(facility_capacities)),
+            )
         p_median.__add_obj(r_cli, r_fac)
 
         FacilityModelBuilder.add_facility_constraint(p_median, p_facilities)
@@ -315,7 +316,7 @@ class PMedian(LocateSolver, BaseOutputMixin, MeanDistanceMixin):
         predefined_facility_col : str (default None)
             Column name representing facilities are already defined.
         facility_capacities_col: str (default None)
-            Column name representing the capacities of each facility. 
+            Column name representing the capacities of each facility.
         distance_metric : str (default 'euclidean')
             A metric used for the distance calculations supported by
             `scipy.spatial.distance.cdist <https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.cdist.html>`_.
@@ -436,15 +437,12 @@ class PMedian(LocateSolver, BaseOutputMixin, MeanDistanceMixin):
         distances = cdist(dem_data, fac_data, distance_metric)
 
         return cls.from_cost_matrix(
-            cost_matrix=distances, 
-            weights=service_load, 
-            p_facilities=p_facilities, 
-            predefined_facilities_arr = predefined_facilities_arr, 
+            cost_matrix=distances,
+            weights=service_load,
+            p_facilities=p_facilities,
+            predefined_facilities_arr=predefined_facilities_arr,
             facility_capcities=facility_capacities,
-            name=("capacitated" + name 
-                  if facility_capacities is not None 
-                  else name
-                )
+            name=("capacitated" + name if facility_capacities is not None else name),
         )
 
     def facility_client_array(self) -> None:
