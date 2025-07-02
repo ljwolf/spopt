@@ -147,7 +147,6 @@ def _build_route_table_http(demand_sites, candidate_depots, cost='distance', por
     request_url = _create_route_request(demand_sites, candidate_depots, cost=cost, port=port)
     request = requests.get(request_url)
     content = request.json()
-    
     if cost == 'distance':
         D = numpy.asarray(content["distances"]).astype(float)
         output = (D,None)
