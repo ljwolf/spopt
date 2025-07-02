@@ -1,6 +1,6 @@
+from spopt.route import engine
 import numpy
 import pandas
-import routing
 import copy
 import geopandas
 import shapely
@@ -250,7 +250,7 @@ def routes_and_stops(
         route_obj = route_lut[name]
         group = group.sort_values("stop_number")
         coordinates = shapely.get_coordinates(group.geometry)
-        shape, durations = routing.build_specific_route(
+        shape, durations = engine.build_specific_route(
             numpy.vstack(
                 (
                 depot_location,
@@ -281,9 +281,9 @@ def routes_and_stops(
             ) * cost_unit,
             deptime,
             rettime,
-            round(route_obj.duration() / truck_obj.max_duration * 100, 2),
-            round(route_obj.delivery() / truck_obj.capacity * 100, 2),
-            round(route_obj.distance() / truck_obj.max_distance * 100, 2),
+            round(float(route_obj.duration()) / truck_obj.max_duration * 100, 2),
+            round(float(route_obj.delivery()[0]) / truck_obj.capacity[0] * 100, 2),
+            round(float(route_obj.distance()) / truck_obj.max_distance * 100, 2),
             shape
         ))
     

@@ -24,21 +24,21 @@ classifiers = [
     "Intended Audience :: Science/Research",
     "Topic :: Scientific/Engineering :: GIS",
 ]
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
-    "geopandas>=0.12",
-    "libpysal>=4.6",
-    "mapclassify>=2.5",
-    "networkx>=2.7",
-    "numpy>=1.22",
-    "pandas>=1.4,!=1.5.0",
-    "pulp>=2.7",
-    "scikit-learn>=1.1",
-    "scipy>=1.8",
-    "shapely>=2.0.1",
-    "spaghetti>=1.6.4",
-    "tqdm>=4.63.0",
-    "pointpats>=2.3.0"
+    "geopandas>=0.14.0",
+    "libpysal>=4.10.0",
+    "mapclassify>=2.7.0",
+    "networkx>=3.2",
+    "numpy>=1.26.0",
+    "pandas>=2.1.0",
+    "pointpats>=2.4.0",
+    "pulp>=2.8",
+    "scikit-learn>=1.4.0",
+    "scipy>=1.12.0",
+    "shapely>=2.1.0",
+    "spaghetti>=1.7.4",
+    "tqdm>=4.66.0",
 ]
 
 
@@ -67,12 +67,16 @@ notebooks = [
     "folium",
     "glpk",
     "inequality",
-    "matplotlib>=3.6",
+    "matplotlib>=3.8",
     "matplotlib-scalebar",
     "overpy",
     "routingpy",
     "seaborn",
     "watermark",
+]
+sa3 = [
+    "fast_hdbscan>=0.2.2",
+    "numba",
 ]
 
 
@@ -81,6 +85,7 @@ include = ["spopt", "spopt.*"]
 
 [tool.ruff]
 line-length = 88
+extend-include = ["*.ipynb"]
 lint.select = ["E", "F", "W", "I", "UP", "N", "B", "A", "C4", "SIM", "ARG"]
 
 [tool.ruff.lint.per-file-ignores]
@@ -88,6 +93,9 @@ lint.select = ["E", "F", "W", "I", "UP", "N", "B", "A", "C4", "SIM", "ARG"]
      "F401",  # imported but unused
      "F403",  # star import; unable to detect undefined names
  ]
+"*.ipynb" = [
+    "F401",  # imported but unused
+]
 
 [tool.coverage.run]
 source = ["./spopt"]
