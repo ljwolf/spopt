@@ -2,17 +2,20 @@ name: test
 channels:
   - conda-forge
 dependencies:
-  - python=3.12
+  - python=3.14
+  - fast_hdbscan # for sa3
   - folium # for geopandas.explore()
-  - geos # for shapely
   - matplotlib # for geopandas.explore()
+  - numba # for sa3
   - tqdm
+
   # testing
   - codecov
   - coverage
   - pytest
   - pytest-cov
   - pytest-xdist
+  
   # with pip
   - pip
   - pip:
@@ -20,15 +23,18 @@ dependencies:
     - --pre \
       --index-url https://pypi.anaconda.org/scientific-python-nightly-wheels/simple  \
       --extra-index-url https://pypi.org/simple
+    - networkx
     - numpy
     - pandas
+    - pyvrp==0.13.2
+    - routingpy
+    - randomname
     - pulp
     - scikit-learn
     - scipy
+    - shapely
     - git+https://github.com/geopandas/geopandas.git
     - git+https://github.com/pysal/libpysal.git
     - git+https://github.com/pysal/mapclassify.git
-    - git+https://github.com/networkx/networkx.git
     - git+https://github.com/pysal/pointpats.git
-    - git+https://github.com/shapely/shapely.git
     - git+https://github.com/pysal/spaghetti.git

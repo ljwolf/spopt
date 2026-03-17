@@ -2,26 +2,40 @@ name: test
 channels:
   - conda-forge
 dependencies:
-  - python=3.10
+  - python=3.14
+  - fast_hdbscan # for sa3
   - geopandas
   - libpysal
   - mapclassify
   - networkx
+  - numba # for sa3
   - numpy
   - pandas
+  - pointpats
   - scikit-learn
   - scipy
   - shapely
   - spaghetti
   - tqdm
-  - pointpats
+
   # testing
   - codecov
   - coverage
   - pytest
   - pytest-cov
   - pytest-xdist
+
+  # docs - only this env
+  - nbsphinx
+  - numpydoc
+  - sphinx
+  - sphinxcontrib-bibtex
+  - sphinx_bootstrap_theme
+
   # with pip
   - pip
   - pip:
     - pulp
+    - pyvrp==0.13.2
+    - routingpy
+    - randomname

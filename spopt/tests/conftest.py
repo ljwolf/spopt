@@ -2,7 +2,6 @@ import pathlib
 import pickle
 import warnings
 
-import _pytest
 import geopandas
 import numpy
 import pandas
@@ -23,21 +22,21 @@ from packaging.version import Version
 GPD_GE_10 = Version(geopandas.__version__) >= Version("1.0")
 
 
-def dirpath() -> pathlib.Path:
-    """Path to test data directory"""
-    return pathlib.Path(__file__).absolute().parent / "data"
+def locate_dirpath() -> pathlib.Path:
+    """Path to locate test data directory"""
+    return pathlib.Path(__file__).absolute().parent / "test_locate" / "data"
 
 
 @pytest.fixture
-def load_test_data():
+def load_locate_test_data():
     """Load test data for the ``locate`` module."""
 
     def _load_test_data(_file: str) -> dict | pandas.DataFrame:
         if _file.endswith(".pkl"):
-            with open(dirpath() / _file, "rb") as f:
+            with open(locate_dirpath() / _file, "rb") as f:
                 test_data = pickle.load(f)
         elif _file.endswith(".csv"):
-            test_data = pandas.read_csv(dirpath() / _file)
+            test_data = pandas.read_csv(locate_dirpath() / _file)
         else:
             raise FileNotFoundError(f"`{_file}` does not exist.")
 
@@ -134,37 +133,37 @@ _warns_geo_crs = pytest.warns(UserWarning, match="Geometry is in a geographic CR
 
 
 @pytest.fixture
-def loc_warns_geo_crs() -> _pytest.recwarn.WarningsChecker:
+def loc_warns_geo_crs():
     """`locate` warning"""
     return _warns_geo_crs
 
 
 @pytest.fixture
-def loc_warns_mixed_type_dem() -> _pytest.recwarn.WarningsChecker:
+def loc_warns_mixed_type_dem():
     """`locate` warning"""
     return pytest.warns(UserWarning, match="Demand geodataframe contains mixed type")
 
 
 @pytest.fixture
-def loc_warns_mixed_type_fac() -> _pytest.recwarn.WarningsChecker:
+def loc_warns_mixed_type_fac():
     """`locate` warning"""
     return pytest.warns(UserWarning, match="Facility geodataframe contains mixed type")
 
 
 @pytest.fixture
-def loc_raises_diff_crs() -> _pytest.python_api.RaisesContext:
+def loc_raises_diff_crs():
     """`locate` error"""
     return pytest.raises(ValueError, match="Geodataframes crs are different: ")
 
 
 @pytest.fixture
-def loc_raises_infeasible() -> _pytest.python_api.RaisesContext:
+def loc_raises_infeasible():
     """`locate` error"""
     return pytest.raises(RuntimeError, match="Model is not solved: Infeasible.")
 
 
 @pytest.fixture
-def loc_raises_fac_constr() -> _pytest.python_api.RaisesContext:
+def loc_raises_fac_constr():
     """`locate` error"""
     return pytest.raises(AttributeError, match="Before setting facility constraint")
 
@@ -181,9 +180,9 @@ def toy_fac_data() -> geopandas.GeoDataFrame:
 
 
 @pytest.fixture
-def toy_dem_data() -> (
-    tuple[geopandas.GeoDataFrame, geopandas.GeoDataFrame, geopandas.GeoDataFrame]
-):
+def toy_dem_data() -> tuple[
+    geopandas.GeoDataFrame, geopandas.GeoDataFrame, geopandas.GeoDataFrame
+]:
     """Toy demand data used in ``locate`` error & warning tests."""
 
     point = shapely.Point(10, 10)

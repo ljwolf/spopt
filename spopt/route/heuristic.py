@@ -105,18 +105,27 @@ class LastMile:
                 name = str(len(self.trucks_) + 1)
             else:
                 name = "0"
-        v_ = self.model.add_vehicle_type(
+        shift_minutes = int(max_duration.total_seconds() / 60)
+
+        common_kwargs = dict(
             name=str(name),
             num_available=int(n_truck),
             capacity=int(capacity / self.demand_unit_),
             fixed_cost=int(fixed_cost / self.cost_unit),
-            tw_early=depot_ints[0,0],
-            tw_late=depot_ints[0,1],
-            max_duration=int(max_duration.total_seconds() / 60),
+            tw_early=depot_ints[0, 0],
+            tw_late=depot_ints[0, 1],
             max_distance=max_distance if max_distance is not None else _MAX_INT,
             unit_distance_cost=int(cost_per_meter / self.cost_unit),
             unit_duration_cost=int(cost_per_minute / self.cost_unit),
         )
+
+        try:
+            # Newer PyVRP (0.12+): uses shift_duration
+            v_ = self.model.add_vehicle_type(**common_kwargs, shift_duration=shift_minutes)
+        except TypeError:
+            # Older PyVRP: uses max_duration
+            v_ = self.model.add_vehicle_type(**common_kwargs, max_duration=shift_minutes)
+
         if hasattr(self, "trucks_"):
             self.trucks_.append(v_)
         else:
